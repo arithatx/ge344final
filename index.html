@@ -1,0 +1,266 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Arithat</title>
+    </head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+ integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+ crossorigin="" />
+ 
+ <!-- W3 CSS template -->
+ <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+ 
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+ integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+ crossorigin=""></script>
+ <style>
+ #mapid {
+ height: 800px;
+ }
+ </style>
+<body>
+<div class="w3-row">
+    <div id="mapid" class="w3-half"></div>
+    <div id="content" class="w3-half">
+    <table class="w3-table w3-striped">
+    <tr>
+    <th>ชื่อแหล่งท่องเที่ยว</th>
+    <th>ประเภท</th>
+    <th>ระดับ</th>
+    </tr>
+    <tr>
+    <td>น้ำตก A</td>
+    <td>ธรรมชาติ</td>
+    <td>A</td>
+    </tr>
+    </table>
+  </div>
+</div>
+<script>
+    var map = L.map("mapid").setView([17.53899785034393, 100.86130992069421], 8);
+    var tourpoint = 
+    {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "บอนชอน",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.53207218650545,
+          13.745736570412546
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KFC",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.53022426671794,
+          13.744063319851847
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ส้มตำคุณกัญจณ์",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.62129269618771,
+          13.685223100488287
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ครัวทับเเก้วหมูจุ่ม",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.62410669341557,
+          13.684706660648231
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "เจริญรสชาบู",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.53986697395396,
+          13.769151830136721
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "level": 10,
+        "name": "ทองสมิทธิ์",
+        "type": "food"
+      },
+      "geometry": {
+        "coordinates": [
+          100.53479391534592,
+          13.746376320165368
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "สุกี้ตี๋น้อย",
+        "type": "food",
+        "level": 9
+      },
+      "geometry": {
+        "coordinates": [
+          100.57892927116438,
+          13.784458305459182
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MK",
+        "type": "food",
+        "level": 10
+      },
+      "geometry": {
+        "coordinates": [
+          100.56975139021455,
+          13.766820391902925
+        ],
+        "type": "Point"
+      },
+      "id": 8
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "burgerking",
+        "type": "food",
+        "level": 9
+      },
+      "geometry": {
+        "coordinates": [
+          100.572138565626,
+          13.770137722276985
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "เล็กต้มยำ",
+        "type": "food",
+        "level": 9
+      },
+      "geometry": {
+        "coordinates": [
+          100.50771608465777,
+          13.717978599498934
+        ],
+        "type": "Point"
+      }
+    }
+  ]
+}
+
+
+var osm = L.tileLayer(
+ "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+ ).addTo(map);
+ var gsat = L.tileLayer(
+ "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+ ).addTo(map);
+ 
+ var baseMaps = {
+ OSM: osm,
+ GoogleSat: gsat,
+ };
+ var tourLayer = L.geoJSON(tourpoint, {
+ pointToLayer: function (feature, latlng) {
+ return L.marker(latlng).bindPopup(feature.properties.name);
+ },
+ onEachFeature: function (feature, layer) {
+ layer.on("mouseover", function () {
+ document
+ .getElementById(feature.properties.name)
+ .classList.add("w3-red");
+ });
+ 
+ layer.on("mouseout", function () {
+ document
+ .getElementById(feature.properties.name)
+ .classList.remove("w3-red");
+ });
+ },
+ }).addTo(map);
+ 
+ var cont = "";
+ cont += "<table class='w3-table w3-striped'>";
+ cont += "<tr>";
+ cont += "<th>ชื่อแหล่งท่องเที่ยว</th>";
+ cont += "<th>ประเภท</th>";
+ cont += "<th>ระดับ</th>";
+ cont += "</tr>";
+ for (let i in tourpoint.features) {
+ cont += "<tr id=" + tourpoint.features[i].properties.name + ">";
+ cont += "<td>" + tourpoint.features[i].properties.name + "</td>";
+ cont += "<td>" + tourpoint.features[i].properties.type + "</td>";
+ cont += "<td>" + tourpoint.features[i].properties.level + "</td>";
+ cont += "</tr>";
+ }
+ cont += "</table>";
+ console.log(cont);
+ document.getElementById("content").innerHTML = cont;
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
